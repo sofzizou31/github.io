@@ -123,9 +123,43 @@
             from { opacity: 0.3; }
             to { opacity: 1; }
         }
+
+        /* Contrôles musique */
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(255,255,255,0.8);
+            padding: 5px;
+            border-radius: 20px;
+        }
+        
+        .music-controls button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <!-- Lecteur audio caché -->
+    <audio id="eidMusic" loop>
+        <source src="music/eid-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Contrôles musique -->
+    <div class="music-controls animate__animated animate__fadeInUp">
+        <button onclick="playMusic()">تشغيل الموسيقى</button>
+        <button onclick="pauseMusic()">إيقاف الموسيقى</button>
+    </div>
+
     <!-- Décorations flottantes -->
     <img src="images/lantern.png" class="decoration left animate__animated animate__fadeInLeft">
     <img src="images/lantern.png" class="decoration right animate__animated animate__fadeInRight">
@@ -142,7 +176,7 @@
         
         <div class="message">
             <p>كل عام وأنتم بخير</p>
-            <p>تقبل الله منا ومنكم صالح الأعمال</p>
+            <p>تقبل الله مننا ومنكم صالح الأعمال</p>
             <p>أعاده الله علينا وعليكم باليمن والبركات</p>
         </div>
         
@@ -156,12 +190,31 @@
         </div>
         
         <div class="footer">
-            <p>موقع عيد مبارك - Aidek Mabrouk </p>
-            <p> 🚀 SOFZIZOU 🚀 </p>
+            <p>موقع عيد مبارك - Aidek Mabrouk</p>
+            <p>🚀 SOFZIZOU 🚀</p>
         </div>
     </div>
 
     <script>
+        // Gestion de la musique
+        const music = document.getElementById('eidMusic');
+        music.volume = 0.3; // Volume à 30%
+
+        function playMusic() {
+            music.play().catch(e => console.log("Lecture bloquée :", e));
+        }
+
+        function pauseMusic() {
+            music.pause();
+        }
+
+        // Démarrage automatique après interaction utilisateur
+        document.body.addEventListener('click', function initMusic() {
+            playMusic();
+            document.body.removeEventListener('click', initMusic);
+        }, { once: true });
+
+        // Génération de messages
         function generateMessage() {
             const name = document.getElementById('userName').value.trim();
             if (name === '') {
@@ -170,7 +223,7 @@
             }
             
             const messages = [
-                `كل عام و${name} بخير، تقبل الله منا ومنك صالح الأعمال`,
+                `كل عام و${name} بخير، تقبل الله مننا ومنك صالح الأعمال`,
                 `أعاده الله علينا وعليك ${name} باليمن والبركات`,
                 `كل عام وأنت ${name} إلى الله أقرب`,
                 `عيد مبارك ${name}، أسعد الله أيامك`
