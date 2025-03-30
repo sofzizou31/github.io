@@ -8,24 +8,30 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background: url('images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             text-align: center;
             margin: 0;
             padding: 0;
+            position: relative;
+            min-height: 100vh;
         }
         
         .container {
             max-width: 500px;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
         }
         
         h1 {
             color: #2e7d32;
-            font-size: 28px;
+            font-size: 2.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         
         .eid-image {
@@ -33,49 +39,106 @@
             max-width: 300px;
             margin: 20px auto;
             display: block;
+            border: 3px solid #2e7d32;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         .message {
-            font-size: 18px;
-            line-height: 1.6;
+            font-size: 1.2em;
+            line-height: 1.8;
             color: #333;
             margin: 20px 0;
         }
         
         .name-input {
-            margin: 20px 0;
+            margin: 25px 0;
         }
         
         input[type="text"] {
             width: 70%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #2e7d32;
+            border-radius: 8px;
             font-size: 16px;
+            text-align: center;
         }
         
         button {
             background-color: #2e7d32;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3e9d42;
+            transform: scale(1.05);
         }
         
         .footer {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 14px;
-            color: #777;
+            color: #555;
+        }
+
+        /* Décorations */
+        .decoration {
+            position: fixed;
+            width: 120px;
+            z-index: 0;
+            opacity: 0.8;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .left {
+            left: 5%;
+            top: 15%;
+        }
+        
+        .right {
+            right: 5%;
+            top: 15%;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Étoiles animées */
+        .star {
+            position: absolute;
+            color: gold;
+            font-size: 20px;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
+    <!-- Décorations flottantes -->
+    <img src="images/lantern.png" class="decoration left animate__animated animate__fadeInLeft">
+    <img src="images/lantern.png" class="decoration right animate__animated animate__fadeInRight">
+
+    <!-- Étoiles décoratives -->
+    <div class="star" style="top:10%; left:15%;">★</div>
+    <div class="star" style="top:25%; right:20%;">★</div>
+    <div class="star" style="bottom:15%; left:20%;">★</div>
+    <div class="star" style="bottom:25%; right:15%;">★</div>
+
     <div class="container animate__animated animate__fadeIn">
         <h1>عيد مبارك</h1>
-        <img src="https://example.com/eid-image.jpg" alt="Aïd Mubarak" class="eid-image animate__animated animate__pulse animate__infinite">
+        <img src="images/eid-image.jpg" alt="Aïd Mubarak" class="eid-image animate__animated animate__pulse animate__infinite">
         
         <div class="message">
             <p>كل عام وأنتم بخير</p>
@@ -135,6 +198,24 @@
                 alert('مشاركة الرسالة: ' + document.getElementById('personalMessage').textContent);
             }
         }
+
+        // Ajout d'étoiles aléatoires
+        function createStars() {
+            const colors = ['gold', '#f8d56b', '#ffffff'];
+            for (let i = 0; i < 10; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '★';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.color = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(star);
+            }
+        }
+        
+        window.onload = createStars;
     </script>
 </body>
 </html>
