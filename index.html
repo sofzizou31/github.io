@@ -94,7 +94,7 @@
             opacity: 0.9;
             animation: float 4s ease-in-out infinite;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
-            width: 200px; /* Taille augmentée */
+            width: 200px;
         }
         
         .left {
@@ -167,16 +167,37 @@
                 top: 5%;
             }
         }
+
+        /* Style pour les boutons de partage */
+        .share-buttons {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .share-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .share-btn i {
+            margin-right: 5px;
+        }
     </style>
+    <!-- Icônes Font Awesome pour les boutons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <!-- Lecteur audio caché -->
     <audio id="eidMusic" loop>
         <source src="music/eid-sound.mp3" type="audio/mpeg">
     </audio>
-
-
-
 
     <!-- Décorations flottantes - Lanternes agrandies -->
     <img src="images/lantern.png" class="decoration left animate__animated animate__fadeInLeft" alt="Lanterne gauche">
@@ -211,14 +232,13 @@
             <p>موقع عيد مبارك - Aidek Mabrouk</p>
             <p>🚀 SOFZIZOU 🚀</p>
             <p><a href="https://sofzizou31.github.io/" style="color: #2e7d32; text-decoration: none;">عيد مبارك</a></p>
-               </div>
         </div>
     </div>
 
     <script>
         // Gestion de la musique
         const music = document.getElementById('eidMusic');
-        music.volume = 0.3; // Volume à 30%
+        music.volume = 0.3;
 
         function playMusic() {
             music.play().catch(e => console.log("Lecture bloquée :", e));
@@ -228,7 +248,6 @@
             music.pause();
         }
 
-        // Démarrage automatique après interaction utilisateur
         document.body.addEventListener('click', function initMusic() {
             playMusic();
             document.body.removeEventListener('click', initMusic);
@@ -254,23 +273,53 @@
             document.getElementById('personalMessage').innerHTML = `
                 <h3>رسالة خاصة لـ ${name}</h3>
                 <p>${randomMessage}</p>
-                <button onclick="shareMessage()">مشاركة الرسالة</button>
+                <div class="share-buttons">
+                    <button class="share-btn" onclick="shareViaWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> مشاركة عبر واتساب
+                    </button>
+                    <button onclick="shareMessage()">
+                        <i class="fas fa-share-alt"></i> مشاركة عامة
+                    </button>
+                </div>
             `;
             document.getElementById('personalMessage').style.display = 'block';
         }
         
+        // Partage spécifique WhatsApp
+        function shareViaWhatsApp() {
+            const messageText = document.querySelector('#personalMessage p').textContent;
+            const shareUrl = window.location.href;
+            const whatsappText = `${messageText}\n\n${shareUrl}`;
+            
+            window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`, '_blank');
+        }
+        
+        // Partage natif (pour autres applications)
         function shareMessage() {
+            const messageText = document.querySelector('#personalMessage p').textContent;
+            const shareUrl = window.location.href;
+            
             if (navigator.share) {
                 navigator.share({
                     title: 'عيد مبارك',
-                    text: document.getElementById('personalMessage').textContent,
-                    url: window.location.href
+                    text: messageText,
+                    url: shareUrl
                 }).catch(err => {
                     console.log('Error sharing:', err);
+                    copyToClipboard(`${messageText}\n\n${shareUrl}`);
                 });
             } else {
-                alert('مشاركة الرسالة: ' + document.getElementById('personalMessage').textContent);
+                copyToClipboard(`${messageText}\n\n${shareUrl}`);
             }
+        }
+        
+        // Fonction pour copier dans le presse-papier
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('تم نسخ الرسالة! يمكنك الآن لصقها في أي تطبيق مراسلة');
+            }).catch(() => {
+                prompt('انسخ هذا النص للشاركة:', text);
+            });
         }
 
         // Ajout d'étoiles aléatoires
